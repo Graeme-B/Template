@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/rhianna/static/css/main.3af9da2f.css",
+    "main.js": "/rhianna/static/js/main.e842ea03.js",
+    "index.html": "/rhianna/index.html",
+    "main.3af9da2f.css.map": "/rhianna/static/css/main.3af9da2f.css.map",
+    "main.e842ea03.js.map": "/rhianna/static/js/main.e842ea03.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3af9da2f.css",
+    "static/js/main.e842ea03.js"
+  ]
+}
