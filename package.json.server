@@ -1,7 +1,7 @@
 {
   "name": "react-website",
-  "homepage": "/rhianna",
-  "actionsUrl": "http://localhost/rhianna/actions.php",
+  "homepage": "/cwc_react",
+  "actionsUrl": "https://rhianna/cwc_react/actions.php",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
