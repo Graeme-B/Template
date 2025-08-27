@@ -71,6 +71,9 @@ case 'logon':
 case 'two_phase_auth_code':
     include 'auth_code.php';
     break;
+case 'resend_two_phase_auth_code':
+    include 'resend_auth_code.php';
+    break;
 case 'check_captcha':
     include 'check_captcha.php';
     break;

@@ -19,7 +19,8 @@ if (!isset($_SESSION['two_phase_userid']) ||
     !isset($_SESSION['two_phase_code'])   || 
     !isset($_SESSION['two_phase_expiry']) ||
     !isset($_SESSION['two_phase_admin'])  ||
-    !isset($_SESSION['two_phase_email'])) {
+    !isset($_SESSION['two_phase_email'])  ||
+    !isset($_SESSION['two_phase_tel_no'])) {
    $result["result"] = NO_AUTH_IN_PROGRESS;
    reportSecurityProblem("Attempt to authorise without an associated logon attempt");
 }
@@ -50,6 +51,7 @@ if ($result['result'] == "") {
        unset($_SESSION['two_phase_expiry']); 
        unset($_SESSION['two_phase_admin']);  
        unset($_SESSION['two_phase_email']);
+       unset($_SESSION['two_phase_tel_no']);
 
        $result["result"] = AUTH_CODE_TIMEOUT;
    }    

@@ -14,6 +14,7 @@ export const USER_TYPE_UNAUTHENTICATED = 'unauthenticated';
 export const OPERATION_LOGOFF                = '?operation=logoff';
 export const OPERATION_LOGON                 = '?operation=logon&userid=%s&password=%s';
 export const OPERATION_TWO_PHASE             = '?operation=two_phase_auth_code&code=%s';
+export const OPERATION_RESEND_CODE           = '?operation=resend_two_phase_auth_code';
 export const OPERATION_FORGOTTEN_PASSWORD    = '?operation=forgotten_password&email=%s';
 export const OPERATION_FORGOTTEN_USERID      = '?operation=forgotten_userid&email=%s';
 export const OPERATION_RESET_PASSWORD        = '?operation=reset_password&email=%s&password=%s&reset_code=%s';

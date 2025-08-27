@@ -45,39 +45,10 @@ if (array_key_exists("userid",$parms) && is_string($parms["userid"]) &&
       else if (strcmp($res[0]['password'],$password) == 0)
       {
          if ($res[0]['two_phase']) {
-
-            // Calculate expiration time using timeout from config
-            $expirationTime = time() + TWO_PHASE_TIMEOUT;
-            $timeoutMinutes = intval(TWO_PHASE_TIMEOUT / 60);
-
-            // Store in session for verification
-            $_SESSION['two_phase_userid'] = $userid;
-            $_SESSION['two_phase_code']   = sprintf('%06d', rand(0,999999));
-            $_SESSION['two_phase_expiry'] = $expirationTime;
-            $_SESSION['two_phase_admin']  = $res[0]['admin_user'];
-            $_SESSION['two_phase_email']  = $res[0]['email'];
-
-/*
-            // Send SMS with authentication code
-            $phoneNumber = $res['telephone_no'];
-            $smsMessage = "Your authentication code is {$twoPhaseCode}. This will expire in {$timeoutMinutes} minutes.";
-
-            if (!empty($phoneNumber)) {
-                $smsResult = sendSMS($phoneNumber, $smsMessage);
-                if (!$smsResult) {
-                    error_log("Failed to send SMS to {$phoneNumber} for user {$user['userid']}");
-                    // Continue with authentication even if SMS fails
-                }
-            } else {
-                error_log("No phone number found for user {$user['userid']} requiring two-factor authentication");
-            }
-*/
-
-            $result['message']            = 'Two-factor authentication code sent to your phone';
-            $result['code']               = $_SESSION['two_phase_code'];
-            $result['expires_in_minutes'] = $timeoutMinutes;
-            $result["result"]             = "two_phase";
+            sendAuthCode($userid, $res[0]['admin_user'], $res[0]['email'], $res[0]['telephone_no'], $result);
+            $result["result"] = "two_phase";
          } else {
+
             $_SESSION['logged_on']  = "TRUE";
             $_SESSION['userid']     = $userid;
             $_SESSION['admin_user'] = $res[0]["admin_user"] == 1 ? "TRUE" : "FALSE";

@@ -21,7 +21,24 @@ export default function TwoPhaseDialog(props) {
   };              
 
   const handleResend = event => {
-      console.log("Reset");
+    $.ajax({
+      type: "GET",
+      url: packageInfo.actionsUrl + Constants.OPERATION_RESEND_CODE,
+      xhrFields: { withCredentials: true, credentials: 'include' },
+      success(json, textStatus, request) {
+        if (json["result"] === "two_phase") {
+          alert("Code resent - please check your cellphone");
+        } else if (json["result"] === "AuthNotInProgress") {
+          alert("Login failed - authorisation not in progress");
+        } else if (json["result"] === "InvalidAuthCode") {
+          alert("Login failed - authorisation code invalid");
+        } else if (json["result"] === "AuthCodeTimeouts") {
+          alert("Login failed - authorisation timed out");
+        } else {
+          alert("Login failed - unknown error");
+        }
+      }
+    });
   };
 
   const handleCode = () => {
@@ -57,6 +74,9 @@ export default function TwoPhaseDialog(props) {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Authentication Code</DialogTitle>
       <DialogContent>
+        <div id="content">
+        Please enter the six digit code which has been sent to your cellphone.
+        </div>
         <TextField
           autoFocus
           margin="dense"
