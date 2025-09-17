@@ -10,7 +10,7 @@ import packageInfo from '../../package.json';
 import * as Constants from '../Constants';
 
 export default function ConfirmDialog(props) {
-  const { open, onClose, onSuccess } = props;
+  const { userid, open, onClose, onSuccess } = props;
 
   const handleClose = () => {
     onClose();
@@ -20,7 +20,7 @@ export default function ConfirmDialog(props) {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Confirm</DialogTitle>
       <DialogContent>
-        <p>Are you sure you want to delete this user?</p>
+        <p>Are you sure you want to delete user {userid}?</p>
       </DialogContent>
       <DialogActions>
         <Button onClick={onSuccess}>Delete</Button>

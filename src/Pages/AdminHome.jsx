@@ -217,7 +217,7 @@ export default function AdminHome (props) {
   return (
     <div>
       <div>
-        <ConfirmDialog open={confirmIsOpen} onClose={closeConfirm} onSuccess={deleteItem}/>
+        <ConfirmDialog userid={deletionId} open={confirmIsOpen} onClose={closeConfirm} onSuccess={deleteItem}/>
       </div>
       <div d="wrapper" style={wrapperStyle}>
         <div id="header" style={headerStyle}>
