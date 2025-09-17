@@ -19,7 +19,8 @@ export default function ChangePasswordDialog(props) {
   const [resetCode, setResetCode]       = useState("");
   const {authenticated, setAuthenticated,
          name, setName,
-         email, setEmail}               = useAuthContext();
+         email, setEmail,
+         userid, setUserid}             = useAuthContext();
 
   const handleOldPasswordInputChange = event => {
     setOldPassword(event.target.value);

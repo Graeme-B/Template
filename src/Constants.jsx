@@ -6,6 +6,7 @@ export const MENU_ITEM_CONTACT_US      = 'Contact Us';
 export const MENU_ITEM_HELP            = 'Help';
 export const MENU_ITEM_ABOUT           = 'About';
 export const MENU_ITEM_CHANGE_PASSWORD = 'Change password';
+export const MENU_ITEM_PROFILE         = 'Profile';
 
 export const USER_TYPE_ADMIN           = 'admin';
 export const USER_TYPE_ORDINARY        = 'ordinary';
@@ -22,6 +23,8 @@ export const OPERATION_CHANGE_PASSWORD       = '?operation=change_password&email
 export const OPERATION_REGISTER              = '?operation=register&userid=%s&forename=%s&surname=%s&telno=%s&email=%s&password=%s&captcha=%s';
 export const OPERATION_REGISTRATION_COMPLETE = '?operation=complete_registration&email=%s&registration_code=%s';
 export const OPERATION_SEND_MESSAGE          = '?operation=send_message&name=%s&email=%s&message=%s&captcha=%s';
+export const OPERATION_USERS                 = '?operation=users';
+export const OPERATION_DELETE_USER           = '?operation=delete_user&userid=%s';
 
 // These must match the corresponding state values for the walks on the server
 export const DISPLAY_APPROVED   = 'approved';

@@ -7,7 +7,7 @@ import { format } from 'util';
 import packageInfo from '../../package.json';
 import * as Constants from '../Constants';
 
-export default function Home (props) {
+export default function UserHome (props) {
   const [country, setCountry]             = useState("");
   const [year, setYear]                   = useState("");
   const [course, setCourse]               = useState("");
@@ -175,7 +175,7 @@ export default function Home (props) {
         </div>
 
         <div id="content" style={contentStyle}>
-                Hello, world from the unlogged on page!
+                Hello, world from the user home page!
         </div>
 
         <div id="footer" style={footerStyle}>

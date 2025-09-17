@@ -8,6 +8,7 @@ export const AuthContextProvider = ({ children, ...props }) => {
   const [authenticated, setAuthenticated] = useState(props.authenticated)
   const [name, setName] = useState(props.name)
   const [email, setEmail] = useState(props.email)
+  const [userid, setUserid] = useState(props.userid)
   return (
     <AuthContext.Provider
       value={{
@@ -16,7 +17,9 @@ export const AuthContextProvider = ({ children, ...props }) => {
         name,
         setName,
         email,
-        setEmail
+        setEmail,
+        userid,
+        setUserid
       }}
     >
       {children}

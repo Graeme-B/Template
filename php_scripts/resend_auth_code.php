@@ -50,7 +50,7 @@ if ($result['result'] == "") {
 
 // Return to the client
 header('Content-type: application/json');
-header('Access-Control-Allow-Origin: http://localhost:3000');
+header(sprintf('Access-Control-Allow-Origin: %s', CONFIG_ACCESS_ORIGIN));
 header('Access-Control-Allow-Credentials: true');
 
 echo json_encode($result);

@@ -23,24 +23,26 @@ export default function NavBar ({setParentState}) {
                            {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_CONTACT_US, "link":"/contact_us"},
                            {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_HELP, "link":"/help"}];
   const adminMenuItems  = [{"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_LOGOUT, "link":"/"},
+                           {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_HOME,  "link":"/AdminHome"},
                            {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_CHANGE_PASSWORD, "link":"/ChangePassword"}];
   const userMenuItems   = [{"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_LOGOUT, "link":"/"},
-                           {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_HOME,  "link":"/"},
+                           {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_PROFILE,  "link":"/UserProfile"},
+                           {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_HOME,  "link":"/UserHome"},
                            {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_CHANGE_PASSWORD, "link":"/ChangePassword"},
                            {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_ABOUT, "link":"/about"},
                            {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_CONTACT_US, "link":"/contact_us"},
                            {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_HELP, "link":"/help"}];
-  const [isDrawerOpen, setIsDrawerOpen]                                     = useState(false);
-  const [loginDialogIsOpen, setLoginDialogIsOpen]                           = React.useState(false);
-  const [twoPhaseDialogIsOpen, setTwoPhaseDialogIsOpen]                     = React.useState(false);
-  const [registerDialogIsOpen, setRegisterDialogIsOpen]                     = React.useState(false);
-  const [forgottenPasswordDialogIsOpen, setForgottenPasswordDialogIsOpen]   = React.useState(false);
-  const [forgottenUseridDialogIsOpen, setForgottenUseridDialogIsOpen]       = React.useState(false);
-  const [resetPasswordDialogIsOpen, setResetPasswordDialogIsOpen]           = React.useState(false);
-  const [changePasswordDialogIsOpen, setChangePasswordDialogIsOpen]         = React.useState(false);
-  const [registerCompletionDialogIsOpen, setRegisterCompletionDialogIsOpen] = React.useState(false);
-  const [menuItems, setMenuItems]                                           = useState(unauthMenuItems);
-  const {authenticated, setAuthenticated, name, setName, email, setEmail}   = useAuthContext();
+  const [isDrawerOpen, setIsDrawerOpen]                                                      = useState(false);
+  const [loginDialogIsOpen, setLoginDialogIsOpen]                                            = React.useState(false);
+  const [twoPhaseDialogIsOpen, setTwoPhaseDialogIsOpen]                                      = React.useState(false);
+  const [registerDialogIsOpen, setRegisterDialogIsOpen]                                      = React.useState(false);
+  const [forgottenPasswordDialogIsOpen, setForgottenPasswordDialogIsOpen]                    = React.useState(false);
+  const [forgottenUseridDialogIsOpen, setForgottenUseridDialogIsOpen]                        = React.useState(false);
+  const [resetPasswordDialogIsOpen, setResetPasswordDialogIsOpen]                            = React.useState(false);
+  const [changePasswordDialogIsOpen, setChangePasswordDialogIsOpen]                          = React.useState(false);
+  const [registerCompletionDialogIsOpen, setRegisterCompletionDialogIsOpen]                  = React.useState(false);
+  const [menuItems, setMenuItems]                                                            = useState(unauthMenuItems);
+  const {authenticated, setAuthenticated, name, setName, email, setEmail, userid, setUserid} = useAuthContext();
   let navigate = useNavigate();
 
   const closeLoginDialog               = () => setLoginDialogIsOpen(false)
@@ -56,12 +58,15 @@ export default function NavBar ({setParentState}) {
     if (adminUser === "TRUE") {
       setAuthenticated(Constants.USER_TYPE_ADMIN);
       setMenuItems(adminMenuItems);
+      navigate('/AdminHome', { replace: true })
     } else {
       setAuthenticated(Constants.USER_TYPE_ORDINARY);
       setMenuItems(userMenuItems);
+      navigate('/UserHome', { replace: true })
     }
     setName(userName);
     setEmail(userEmail);
+    setUserid(userName);
     setParentState( Math.floor(Math.random() * 999999));
   }
   const registerSuccess = () => {
@@ -97,6 +102,7 @@ export default function NavBar ({setParentState}) {
         setAuthenticated(Constants.USER_TYPE_UNAUTHENTICATED);
         setMenuItems(unauthMenuItems);
         setParentState( Math.floor(Math.random() * 999999));
+        navigate('/', { replace: true })
       })
       .catch((error) => {
         console.log(error);

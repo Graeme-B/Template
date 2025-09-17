@@ -98,9 +98,17 @@ case 'register':
 case 'complete_registration':
     include 'complete_registration.php';
     break;
-case 'unlock_user':
+case 'unlock_user': if ($_SESSION['logged_on'] == "TRUE" && $_SESSION['admin_user'] == "TRUE") {
+        include 'unlock_user.php';
+    } else {
+        reportSecurityProblem("Invalid attempt to unlock user - logged on ".$_SESSION['logged_on']." id ".$SESSION['userid']);
+    }
+    break;
+case 'add_user':
     if ($_SESSION['logged_on'] == "TRUE" && $_SESSION['admin_user'] == "TRUE") {
-       include 'unlock_user.php';
+        include 'add_user.php';
+    } else {
+        reportSecurityProblem("Invalid attempt to add user - logged on ".$_SESSION['logged_on']." id ".$SESSION['userid']);
     }
     break;
 case 'phpinfo':
@@ -108,6 +116,10 @@ case 'phpinfo':
     break;
 case 'send_message':
     include 'send_message.php';
+    break;
+case 'users': if ($_SESSION['logged_on'] == "TRUE" && $_SESSION['admin_user'] == "TRUE") {
+      include 'users.php';
+    }
     break;
 // case 'main':
  default:

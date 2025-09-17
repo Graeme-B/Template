@@ -5,6 +5,9 @@ define('CONFIG_USER',  'root');
 define('CONFIG_PASS',  '');
 define('CONFIG_DBASE', 'cwc');
 
+define('CONFIG_ACCESS_ORIGIN','http://localhost:3000');
+
+
 define('CONFIG_WEB_SERVER',  'localhost');
 define('CONFIG_SERVER',      'localhost');
 define('CONFIG_PROTOCOL',    'https');

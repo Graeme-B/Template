@@ -1,13 +1,13 @@
 import React, { useState, useEffect, navigation } from 'react';
 import { Link } from "react-router-dom"
 import { Box, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material'
-import { useAuthContext } from '../AuthContext'
 import $ from 'jquery';
 import { format } from 'util';
 import packageInfo from '../../package.json';
 import * as Constants from '../Constants';
+import { useAuthContext } from '../AuthContext'
 
-export default function Home (props) {
+export default function UserProfile (props) {
   const [country, setCountry]             = useState("");
   const [year, setYear]                   = useState("");
   const [course, setCourse]               = useState("");
@@ -28,10 +28,10 @@ export default function Home (props) {
   const [pageNo, setPageNo]               = useState(1);
   const [inputPageNo, setInputPageNo]     = useState(1);
   const [numPages, setNumPages]           = useState(1);
-  const {authenticated, setAuthenticated,
-         name, setName,
-         email, setEmail,
-         userid, setUserid}               = useAuthContext();
+   const {authenticated, setAuthenticated,
+          name, setName,
+          email, setEmail,
+          userid, setUserid}              = useAuthContext();
   var tableContentFunction;
   var tableHeaderFunction;
   var walkId;
@@ -175,7 +175,7 @@ export default function Home (props) {
         </div>
 
         <div id="content" style={contentStyle}>
-                Hello, world from the unlogged on page!
+                Hello, world from the profile page of user {userid}!
         </div>
 
         <div id="footer" style={footerStyle}>

@@ -15,15 +15,23 @@ $result           = [];
 $result["result"] = "failure";
 
 // See if the input parameters are OK
-if (array_key_exists("name",$parms) && is_string($parms["name"]) &&
+if (array_key_exists("userid",$parms) && is_string($parms["userid"]) &&
+    array_key_exists("forename",$parms) && is_string($parms["forename"]) &&
+    array_key_exists("surname",$parms) && is_string($parms["surname"]) &&
+    array_key_exists("telno",$parms) && is_string($parms["telno"]) &&
     array_key_exists("email",$parms) && is_string($parms["email"]) &&
     array_key_exists("password",$parms) && is_string($parms["password"]) &&
+//    array_key_exists("two_phase",$parms) && is_string($parms["two_phase"]) &&
     array_key_exists("captcha",$parms) && is_string($parms["captcha"]))
 {
-   $name     = $parms["name"];
-   $email    = $parms["email"];
-   $password = $parms["password"];
-   $captcha  = $parms["captcha"];
+   $userid       = $parms["userid"];
+   $forename     = $parms["forename"];
+   $surname      = $parms["surname"];
+   $telephone_no = $parms["telno"];
+   $email        = $parms["email"];
+   $password     = $parms["password"];
+   $two_phase    = isset($parms["two_phase"]) ? $parms["two_phase"] : "FALSE";
+   $captcha      = $parms["captcha"];
    if (strcmp($captcha,$_SESSION['captcha']) == 0) {
       $query    = sprintf("SELECT COUNT(*) AS num_users
                            FROM %s
@@ -33,36 +41,36 @@ if (array_key_exists("name",$parms) && is_string($parms["name"]) &&
       {
          $query = sprintf("SELECT COUNT(*) AS num_users
                            FROM %s
-                           WHERE name = ?", CONFIG_USER_TABLE);
-         $res   = query($query,"s",$name);
+                           WHERE userid = ?", CONFIG_USER_TABLE);
+         $res   = query($query,"s",$userid);
          if (sizeof($res) > 0 && $res[0]['num_users'] == 0) {
             $uuid  = uniqid();
-            $query = sprintf("INSERT INTO %s(name, password, admin_user, email, to_be_activated, password_reset_uuid)
-                              VALUES(?,?,FALSE,?,TRUE,?)", CONFIG_USER_TABLE);
-            query($query,"ssss",$name,$password,$email,$uuid);
+            $query = sprintf("INSERT INTO %s(userid, forename, surname, telephone_no, email, password, two_phase, admin_user, to_be_activated, password_reset_uuid)
+                              VALUES(?,?,?,?,?,?,FALSE,FALSE,TRUE,?)", CONFIG_USER_TABLE);
+            query($query,"sssssss",$userid,$forename,$surname,$telephone_no,$email,$password,$uuid);
 
             $url      = CONFIG_PROTOCOL.'://'.CONFIG_WEB_SERVER.'/'.ROOT_PATH.'?action=account_activation&email='.$email.'&register_code='.$uuid;
             $subject  = 'Complete Registration for '.CONFIG_SITE_NAME;
             $message  = '<p>Please click the following link to complete your registration at <a href ="'.$url.'">'.CONFIG_SITE_NAME.'</a></p>';
             $message .= '<p>If you did not register for this site and received this message in error, please email <a href=mailto:'.CONFIG_ADMIN_EMAIL.'>'.CONFIG_ADMIN_EMAIL.'</a></p>';
-            sendEmail($message,$subject,$email);
+            // sendEmail($message,$subject,$email);
             $result["result"] = "success";
          }
          else
          {
-            $result["result"] = EXISTING_NAME;
-            $existingName = TRUE;
+            $result["result"] = EXISTING_USERID;
+            $existingUserid   = TRUE;
             do {
-               $name  = $name."_".rand(0,1000);
-               $query = sprintf("SELECT COUNT(*) AS num_users
-                                 FROM %s
-                                 WHERE name = ?", CONFIG_USER_TABLE);
-               $res   = query($query,"s",$name);
+               $userid = $userid."_".rand(0,1000);
+               $query  = sprintf("SELECT COUNT(*) AS num_users
+                                  FROM %s
+                                  WHERE userid = ?", CONFIG_USER_TABLE);
+               $res    = query($query,"s",$userid);
                if (sizeof($res) > 0 && $res[0]['num_users'] == 0) {
-                  $existingName            = FALSE;
-                  $result["suggestedName"] = $name;
+                  $existingUserid            = FALSE;
+                  $result["suggestedUserid"] = $userid;
                }
-            } while ($existingName);
+            } while ($existingUserid);
          }
       }
       else

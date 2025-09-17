@@ -3,6 +3,9 @@ import { Routes, Route } from 'react-router-dom';
 import NavBar from './Components/NavBar';
 import { AuthContextProvider } from './AuthContext';
 import Home from './Pages/Home';
+import AdminHome from './Pages/AdminHome';
+import UserHome from './Pages/UserHome';
+import UserProfile from './Pages/UserProfile';
 import About from './Pages/About';
 import ContactUs from './Pages/ContactUs';
 import Help from './Pages/Help';
@@ -20,7 +23,7 @@ const App = () => {
   }, [setParentState]);
 
   return (
-    <AuthContextProvider authenticated={Constants.USER_TYPE_UNAUTHENTICATED} name={"fred"} email={""}>
+    <AuthContextProvider authenticated={Constants.USER_TYPE_UNAUTHENTICATED} name={"fred"} email={""} userid={""}>
       <NavBar
         parentState={parentState} 
         setParentState = {wrapperSetParentState} 
@@ -28,9 +31,15 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About state={parentState} />} />
-        <Route path="/contact_us" element={<ContactUs state={parentState} />} />
-        <Route path="/help" element={<Help state={parentState} />} />
+        <Route path="/AdminHome" element={<AdminHome />} />
+        <Route path="/UserHome" element={<UserHome />} />
+        <Route path="/UserProfile" element={<UserProfile />} />
+//        <Route path="/about" element={<About state={parentState} />} />
+//        <Route path="/contact_us" element={<ContactUs state={parentState} />} />
+//        <Route path="/help" element={<Help state={parentState} />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact_us" element={<ContactUs />} />
+        <Route path="/help" element={<Help />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
     </AuthContextProvider>

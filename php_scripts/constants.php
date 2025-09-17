@@ -25,7 +25,7 @@ include_once 'local_config.php';
 // Returned errors
    define('UNKNOWN_USER',          'UnknownUser');
    define('REGISTERED_USER',       'RegisteredUser');
-   define('EXISTING_NAME',         'ExistingName');
+   define('EXISTING_USERID',       'ExistingUserid');
    define('INVALID_PASSWORD',      'InvalidPassword');
    define('ACCOUNT_LOCKED',        'AccountLocked');
    define('INVALID_RESET_UUID',    'InvalidResetUUID');
