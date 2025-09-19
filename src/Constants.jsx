@@ -2,6 +2,8 @@ export const MENU_ITEM_LOGIN           = 'Login';
 export const MENU_ITEM_LOGOUT          = 'Logout';
 export const MENU_ITEM_REGISTER        = 'Register';
 export const MENU_ITEM_HOME            = 'Home';
+export const MENU_ITEM_CONFIG          = 'Configuration';
+export const MENU_ITEM_DETAILS         = 'Details';
 export const MENU_ITEM_CONTACT_US      = 'Contact Us';
 export const MENU_ITEM_HELP            = 'Help';
 export const MENU_ITEM_ABOUT           = 'About';
@@ -25,6 +27,8 @@ export const OPERATION_REGISTRATION_COMPLETE = '?operation=complete_registration
 export const OPERATION_SEND_MESSAGE          = '?operation=send_message&name=%s&email=%s&message=%s&captcha=%s';
 export const OPERATION_USERS                 = '?operation=users';
 export const OPERATION_DELETE_USER           = '?operation=delete_user&userid=%s';
+export const OPERATION_USER_DETAILS          = '?operation=user_details&userid=%s';
+export const OPERATION_USER_CONFIG           = '?operation=user_config&userid=%s';
 
 // These must match the corresponding state values for the walks on the server
 export const DISPLAY_APPROVED   = 'approved';

@@ -7,7 +7,7 @@ import packageInfo from '../../package.json';
 import * as Constants from '../Constants';
 import { useAuthContext } from '../AuthContext'
 
-export default function UserProfile (props) {
+export default function UserConfig (props) {
   const [country, setCountry]             = useState("");
   const [year, setYear]                   = useState("");
   const [course, setCourse]               = useState("");
@@ -40,6 +40,35 @@ export default function UserProfile (props) {
   const hideFooter   = () => { var elem = document.getElementById("footer"); elem.style.display = 'none'; }
   const closeConfirm = () => setConfirmIsOpen(false)
   const openConfirm  = (walkId) => { setDeletionId(walkId); setConfirmIsOpen(true); }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function fetchData() {
+    $.ajax({
+      type: "GET",
+      url: packageInfo.actionsUrl + format(Constants.OPERATION_USER_CONFIG,encodeURIComponent(userid.trim())),
+      xhrFields: { withCredentials: true, credentials: 'include' },
+      success(json, textStatus, request) {
+        if (json["result"] === "success") {
+          let y = [];
+//           json["users"].forEach((item) => {
+//             y.push({
+//               "key": Math.floor(Math.random() * 999999),
+//               "userid": item.userid,
+//               "admin_user": item.admin_user,
+//               "invalid_login_attempts": item.invalid_login_attempts,
+//               "email": item.email,
+//               "to_be_activated": item.to_be_activated,
+//               "email_invalid": item.email_invalids
+//             });
+//           });
+//           setTableContent(y);
+        }
+      }
+    });
+  }
 
   {/*
   const contentStyle = {
@@ -175,7 +204,7 @@ export default function UserProfile (props) {
         </div>
 
         <div id="content" style={contentStyle}>
-                Hello, world from the profile page of user {userid}!
+                Hello, world from the config page of user {userid}!
         </div>
 
         <div id="footer" style={footerStyle}>

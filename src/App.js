@@ -5,7 +5,8 @@ import { AuthContextProvider } from './AuthContext';
 import Home from './Pages/Home';
 import AdminHome from './Pages/AdminHome';
 import UserHome from './Pages/UserHome';
-import UserProfile from './Pages/UserProfile';
+import UserDetails from './Pages/UserDetails';
+import UserConfig from './Pages/UserConfig';
 import About from './Pages/About';
 import ContactUs from './Pages/ContactUs';
 import Help from './Pages/Help';
@@ -33,7 +34,8 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/AdminHome" element={<AdminHome />} />
         <Route path="/UserHome" element={<UserHome />} />
-        <Route path="/UserProfile" element={<UserProfile />} />
+        <Route path="/UserDetails" element={<UserDetails />} />
+        <Route path="/UserConfig" element={<UserConfig />} />
 //        <Route path="/about" element={<About state={parentState} />} />
 //        <Route path="/contact_us" element={<ContactUs state={parentState} />} />
 //        <Route path="/help" element={<Help state={parentState} />} />

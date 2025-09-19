@@ -111,15 +111,29 @@ case 'add_user':
         reportSecurityProblem("Invalid attempt to add user - logged on ".$_SESSION['logged_on']." id ".$SESSION['userid']);
     }
     break;
+case 'users': if ($_SESSION['logged_on'] == "TRUE" && $_SESSION['admin_user'] == "TRUE") {
+        include 'users.php';
+    }
+    break;
+case 'user_details':
+    if ($_SESSION['logged_on'] == "TRUE" && ($_SESSION['admin_user'] == "TRUE" || $_SESSION["userid"] == $parmArray["userid"])) {
+        include 'user_details.php';
+    } else {
+        reportSecurityProblem("Invalid attempt to access user details for user ".$parmArray["userid"]." - logged on ".$_SESSION['logged_on']." id ".$SESSION['userid']);
+    }
+    break;
+case 'user_config':
+    if ($_SESSION['logged_on'] == "TRUE" && ($_SESSION['admin_user'] == "TRUE" || $_SESSION["userid"] == $parmArray["userid"])) {
+        include 'user_config.php';
+    } else {
+        reportSecurityProblem("Invalid attempt to access user config for user ".$parmArray["userid"]." - logged on ".$_SESSION['logged_on']." id ".$SESSION['userid']);
+    }
+    break;
 case 'phpinfo':
     phpinfo();
     break;
 case 'send_message':
     include 'send_message.php';
-    break;
-case 'users': if ($_SESSION['logged_on'] == "TRUE" && $_SESSION['admin_user'] == "TRUE") {
-      include 'users.php';
-    }
     break;
 // case 'main':
  default:

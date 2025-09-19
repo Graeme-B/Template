@@ -1,14 +1,13 @@
 import React, { useState, useEffect, navigation } from 'react';
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Box, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material'
 import $ from 'jquery';
 import { format } from 'util';
 import packageInfo from '../../package.json';
 import * as Constants from '../Constants';
-import ConfirmDialog from './ConfirmDialog.jsx';
 import { useAuthContext } from '../AuthContext'
 
-export default function AdminHome (props) {
+export default function UserDetails (props) {
   const [country, setCountry]             = useState("");
   const [year, setYear]                   = useState("");
   const [course, setCourse]               = useState("");
@@ -29,33 +28,18 @@ export default function AdminHome (props) {
   const [pageNo, setPageNo]               = useState(1);
   const [inputPageNo, setInputPageNo]     = useState(1);
   const [numPages, setNumPages]           = useState(1);
-  const {authenticated, setAuthenticated,
-         name, setName,
-         email, setEmail,
-         userid, setUserid}               = useAuthContext();
+   const {authenticated, setAuthenticated,
+          name, setName,
+          email, setEmail,
+          userid, setUserid}              = useAuthContext();
+  var tableContentFunction;
+  var tableHeaderFunction;
+  var walkId;
 
-  const navigate     = useNavigate();
   const hideHeader   = () => { var elem = document.getElementById("header"); elem.style.display = 'none'; }
   const hideFooter   = () => { var elem = document.getElementById("footer"); elem.style.display = 'none'; }
-  const closeConfirm = () => setConfirmIsOpen(false);
-  const openConfirm  = (userId) => { setDeletionId(userId); setConfirmIsOpen(true); }
-  const goToPage     = (page) => navigate(page);
-
-  const deleteItem = () => {
-    $.ajax({
-      type: "GET",
-      url: packageInfo.actionsUrl + format(Constants.OPERATION_DELETE_USER,deletionId),
-      xhrFields: { withCredentials: true, credentials: 'include' },
-      success(json) {
-        alert("User permanently deleted");
-        closeConfirm();
-        fetchData();
-      },
-      error(json) {
-        alert("Unable to delete user");
-      }
-    });
-  }
+  const closeConfirm = () => setConfirmIsOpen(false)
+  const openConfirm  = (walkId) => { setDeletionId(walkId); setConfirmIsOpen(true); }
 
   useEffect(() => {
     fetchData();
@@ -64,27 +48,28 @@ export default function AdminHome (props) {
   function fetchData() {
     $.ajax({
       type: "GET",
-      url: packageInfo.actionsUrl + Constants.OPERATION_USERS,
+      url: packageInfo.actionsUrl + format(Constants.OPERATION_USER_DETAILS,encodeURIComponent(userid.trim())),
       xhrFields: { withCredentials: true, credentials: 'include' },
       success(json, textStatus, request) {
         if (json["result"] === "success") {
           let y = [];
-          json["users"].forEach((item) => {
-            y.push({
-              "key": Math.floor(Math.random() * 999999),
-              "userid": item.userid,
-              "admin_user": item.admin_user,
-              "invalid_login_attempts": item.invalid_login_attempts,
-              "email": item.email,
-              "to_be_activated": item.to_be_activated,
-              "email_invalid": item.email_invalids
-            });
-          });
-          setTableContent(y);
+//           json["users"].forEach((item) => {
+//             y.push({
+//               "key": Math.floor(Math.random() * 999999),
+//               "userid": item.userid,
+//               "admin_user": item.admin_user,
+//               "invalid_login_attempts": item.invalid_login_attempts,
+//               "email": item.email,
+//               "to_be_activated": item.to_be_activated,
+//               "email_invalid": item.email_invalids
+//             });
+//           });
+//           setTableContent(y);
         }
       }
     });
   }
+
 
   {/*
   const contentStyle = {
@@ -215,49 +200,12 @@ export default function AdminHome (props) {
 
   return (
     <div>
-      <div>
-        <ConfirmDialog userid={deletionId} open={confirmIsOpen} onClose={closeConfirm} onSuccess={deleteItem}/>
-      </div>
       <div d="wrapper" style={wrapperStyle}>
         <div id="header" style={headerStyle}>
         </div>
 
         <div id="content" style={contentStyle}>
-          <table border="1">
-             <thead>
-               <tr>
-                 <th>Userid</th>
-                 <th>Email</th>
-                 <th>Admin user</th>
-                 <th>Invalid login attempts</th>
-                 <th>To be activated</th>
-                 <th>Email invalid</th>
-               </tr>
-             </thead>
-             <tbody>
-               {tableContent.map((item) =>
-                 <tr>
-                   <td>{item.userid}</td>
-                   <td>{item.email}</td>
-                   <td>{item.admin_user}</td>
-                   <td>{item.invalid_login_attempts}</td>
-                   <td>{item.to_be_activated}</td>
-                   <td>{item.email_invalid}</td>
-                   <td><button type="button" onClick={(e) => {
-                         e.preventDefault();
-                         setUserid(item.userid);
-                         goToPage('/UserConfig');}}>
-                         Configuration</button></td>
-                   <td><button type="button" onClick={(e) => {
-                         e.preventDefault();
-                         setUserid(item.userid);
-                         goToPage('/UserDetails');}}>
-                         Details</button></td>
-                   <td><button type="button" onClick={() => openConfirm(item.userid)}>Delete</button></td>
-                 </tr>
-               ) }
-            </tbody>
-          </table>
+                Hello, world from the details page of user {userid}!
         </div>
 
         <div id="footer" style={footerStyle}>

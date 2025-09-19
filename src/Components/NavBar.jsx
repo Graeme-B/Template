@@ -26,7 +26,8 @@ export default function NavBar ({setParentState}) {
                            {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_HOME,  "link":"/AdminHome"},
                            {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_CHANGE_PASSWORD, "link":"/ChangePassword"}];
   const userMenuItems   = [{"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_LOGOUT, "link":"/"},
-                           {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_PROFILE,  "link":"/UserProfile"},
+                           {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_CONFIG,  "link":"/UserConfig"},
+                           {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_DETAILS,  "link":"/UserDetails"},
                            {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_HOME,  "link":"/UserHome"},
                            {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_CHANGE_PASSWORD, "link":"/ChangePassword"},
                            {"key": Math.floor(Math.random() * 999999), "text": Constants.MENU_ITEM_ABOUT, "link":"/about"},

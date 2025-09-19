@@ -34,7 +34,7 @@ INSERT INTO rmi_users(
 
 -- Create platforms table
 CREATE TABLE rmi_platforms (
-    id            INT AUTO_INCREMENT PRIMARY KEY,
+    id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     platform_name VARCHAR(256) NOT NULL
 );
 
@@ -47,16 +47,16 @@ INSERT INTO rmi_platforms (platform_name) VALUES
 
 -- Create and populate the reminder frequencies table
 CREATE TABLE rmi_reminder_frequencies(
-    id        INT AUTO_INCREMENT PRIMARY KEY,
+    id        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     frequency VARCHAR(256) NOT NULL
 );
 INSERT INTO rmi_reminder_frequencies(frequency) VALUES
 ('Daily'),
-('Weekly)';
+('Weekly');
 
 /*
 Field Name		Description									Purpose/Used For
-user_id			Unique ID linking this profile to a specific user				Ensures brand data is tied to the correct account
+userid			Unique ID linking this profile to a specific user				Ensures brand data is tied to the correct account
 business_name		Name of the user’s business							Included in prompts or calendar UI
 industry		General business type (e.g. bakery, recruitment agency)				Adds context to content and tone
 products_or_service	Short description of what they offer						Helps AI write accurate, relevant captions
@@ -78,69 +78,69 @@ Lists of target audiences?
 
 -- Create rmi_profile table
 CREATE TABLE rmi_profile (
-    id                   INT AUTO_INCREMENT PRIMARY KEY,
-    user_id              INT NOT NULL,
+    id                   INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    userid               INT UNSIGNED NOT NULL,
     business_name        VARCHAR(256),
     industry             VARCHAR(256),
     products_or_services VARCHAR(256),
     target_audience      VARCHAR(256),
-    reminder_frequency	 INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES rmi_users(id) ON DELETE CASCADE,
-    FOREIGN KEY (reminder_frequency) REFERENCES rmi_reminder_frequencies ON DELETE CASCADE
+    reminder_frequency	 INT UNSIGNED NOT NULL,
+    FOREIGN KEY (userid) REFERENCES rmi_users(id) ON DELETE CASCADE,
+    FOREIGN KEY (reminder_frequency) REFERENCES rmi_reminder_frequencies(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_brand_tones(
-    id         INT AUTO_INCREMENT PRIMARY KEY,
-    profile_id INT,
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    profile_id INT UNSIGNED NOT NULL,
     brand_tone VARCHAR(256),
     FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_writing_styles (
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    profile_id    INT,
+    id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    profile_id    INT UNSIGNED,
     writing_style VARCHAR(256),
     FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_voice_dos (
-    id         INT AUTO_INCREMENT PRIMARY KEY,
-    profile_id INT,
-    voic_do    VARCHAR(256),
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    profile_id INT UNSIGNED,
+    voice_do   VARCHAR(256),
     FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_voice_donts (
-    id         INT AUTO_INCREMENT PRIMARY KEY,
-    profile_id INT,
-    voic_dont  VARCHAR(256),
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    profile_id INT UNSIGNED,
+    voice_dont VARCHAR(256),
     FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_example_phrases(
-    id             INT AUTO_INCREMENT PRIMARY KEY,
-    profile_id     INT,
+    id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    profile_id     INT UNSIGNED,
     example_phrase VARCHAR(256),
     FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_key_messages (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    profile_id  INT,
+    id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    profile_id  INT UNSIGNED,
     key_message VARCHAR(256),
     FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_content_goals (
-    id           INT AUTO_INCREMENT PRIMARY KEY,
-    profile_id   INT,
+    id           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    profile_id   INT UNSIGNED,
     content_goal VARCHAR(256),
     FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_saved_favourites(
-    id         INT AUTO_INCREMENT PRIMARY KEY,
-    profile_id INT,
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    profile_id INT UNSIGNED,
     phrase     VARCHAR(256),
     FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
 );
