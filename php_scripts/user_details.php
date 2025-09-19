@@ -33,7 +33,7 @@ if (array_key_exists("userid",$parms) && is_string($parms["userid"]))
                         WHERE userid = ?", CONFIG_USER_TABLE);
    $res = query($query, "s", $parms["userid"]);
    if (count($res) > 0) {
-      $result["user"][] = array(
+      $result["user"] = array(
          "forename"                 => $res[0]["forename"],
          "surname"                  => $res[0]["surname"],
          "telephone_no"             => $res[0]["telephone_no"],

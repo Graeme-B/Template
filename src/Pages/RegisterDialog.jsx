@@ -27,10 +27,10 @@ export default function RegisterDialog(props) {
   };              
   const handleForenameChange = event => {
     setForename(event.target.value);
-  };              
+  };
   const handleSurnameChange = event => {
     setSurname(event.target.value);
-  };              
+  };
   const handleTelnoChange = event => {
     setTelno(event.target.value);
   };              
