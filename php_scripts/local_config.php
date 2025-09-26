@@ -18,7 +18,7 @@ define('CONFIG_IMAGE_DIR',   '/cwc');
 define('CONFIG_SITE_NAME',   'Rhianna\'s Marvellous Interface');
 
 define('CONFIG_USER_TABLE',          'rmi_users');
-define('CONFIG_PROFILE_TABLE',       'rmi_profile');
+define('CONFIG_PROFILE_TABLE',       'rmi_profiles');
 define('CONFIG_REMINDER_FREQ_TABLE', 'rmi_reminder_frequencies');
 define('CONFIG_SAVED_FAVOURITES',    'rmi_saved_favourites');
 define('CONFIG_CONTENT_GOALS',       'rmi_content_goals');

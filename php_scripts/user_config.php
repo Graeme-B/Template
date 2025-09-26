@@ -52,111 +52,116 @@ if (array_key_exists("userid",$parms) && is_string($parms["userid"]))
 
 
 
-   $query = sprintf("SELECT p.business_name        AS business_name,
+   $query = sprintf("SELECT p.id                   AS id,
+                            p.business_name        AS business_name,
                             p.industry             AS industry,
                             p.products_or_services AS products_or_services,
                             p.target_audience      AS target_audience,
                             r.frequency            AS frequency
-                     FROM %s p,
+                     FROM %s u,
+                          %s p,
                           %s r
-                     WHERE p.userid = ?
-                     AND   p.reminder_frequency = r.id", CONFIG_PROFILE_TABLE, CONFIG_REMINDER_FREQ_TABLE);
-   $res                                     = query($query, "s", $userid);
-   $result["user"]                          = array();
-   if (count($res) > 0) {
-      $result["user"]["business_name"]         = $res[0]["business_name"];
-      $result["users"]["industry"]             = $res[0]["industry"];
-      $result["users"]["products_or_services"] = $res[0]["products_or_services"];
-      $result["users"]["target_audience"]      = $res[0]["target_audience"];
-      $result["users"]["frequency"]            = $res[0]["frequency"];
+                     WHERE u.userid = ?
+                     AND   u.id = p.userid
+                     AND   p.reminder_frequency = r.id", CONFIG_USER_TABLE, CONFIG_PROFILE_TABLE, CONFIG_REMINDER_FREQ_TABLE);
+   $res            = query($query, "s", $userid);
+   $result["user"] = array();
+   if (getAffectedRows() > 0) {
+      $profileId                              = $res[0]["id"];
+      $result["user"]["business_name"]        = $res[0]["business_name"];
+      $result["user"]["industry"]             = $res[0]["industry"];
+      $result["user"]["products_or_services"] = $res[0]["products_or_services"];
+      $result["user"]["target_audience"]      = $res[0]["target_audience"];
+      $result["user"]["frequency"]            = $res[0]["frequency"];
    
       $query = sprintf("SELECT b.brand_tone AS brand_tone
-                        FROM %s p,
-                             %s b
-                        WHERE p.user_id = ?
-                        AND   p.id      = b.profile_id", CONFIG_PROFILE_TABLE, CONFIG_BRAND_TONES);
-      $res = query($query, "s", $userid);
+                        FROM %s b
+                        WHERE b.profile_id = %d", CONFIG_BRAND_TONES, $profileId);
+      $res                          = query($query);
       $result["user"]["brand_tone"] = array();
-      foreach($res as $row) {
-         $result["users"]["brand_tone"][] = $row["brand_tone"];
+      if (getAffectedRows() > 0) {
+         foreach($res as $row) {
+            $result["user"]["brand_tone"][] = $row["brand_tone"];
+         }
       }
 
       $query = sprintf("SELECT w.writing_style AS writing_style
-                        FROM %s p,
-                             %s w
-                        WHERE p.user_id = ?
-                        AND   p.id      = w.profile_id", CONFIG_PROFILE_TABLE, CONFIG_WRITING_STYLES);
-      $res = query($query, "s", $userid);
+                        FROM %s w
+                        WHERE w.profile_id = %d", CONFIG_WRITING_STYLES, $profileId);
+      $res                             = query($query);
       $result["user"]["writing_style"] = array();
-      foreach($res as $row) {
-         $result["users"]["writing_style"][] = $row["writing_style"];
+      if (getAffectedRows() > 0) {
+         foreach($res as $row) {
+            $result["user"]["writing_style"][] = $row["writing_style"];
+         }
       }
 
-      $query = sprintf("SELECT w.voice_do AS voice_do
-                        FROM %s p,
-                             %s v
-                        WHERE p.user_id = ?
-                        AND   p.id      = v.profile_id", CONFIG_PROFILE_TABLE, CONFIG_VOICE_DOS);
-      $res = query($query, "s", $userid);
+      $query = sprintf("SELECT v.voice_do AS voice_do
+                        FROM %s v
+                        WHERE v.profile_id = %d", CONFIG_VOICE_DOS, $profileId);
+      $res                        = query($query);
       $result["user"]["voice_do"] = array();
-      foreach($res as $row) {
-         $result["users"]["voice_do"][] = $row["voice_do"];
+      if (getAffectedRows() > 0) {
+         foreach($res as $row) {
+            $result["user"]["voice_do"][] = $row["voice_do"];
+         }
       }
 
-      $query = sprintf("SELECT w.voice_dont AS voice_dont
-                        FROM %s p,
-                             %s v
-                        WHERE p.user_id = ?
-                        AND   p.id      = v.profile_id", CONFIG_PROFILE_TABLE, CONFIG_VOICE_DONTS);
-      $res = query($query, "s", $userid);
+      $query = sprintf("SELECT v.voice_dont AS voice_dont
+                        FROM %s v
+                        WHERE v.profile_id = %d", CONFIG_VOICE_DONTS, $profileId);
+      $res                          = query($query);
       $result["user"]["voice_dont"] = array();
-      foreach($res as $row) {
-         $result["users"]["voice_dont"][] = $row["voice_dont"];
+      if (getAffectedRows() > 0) {
+         foreach($res as $row) {
+            $result["user"]["voice_dont"][] = $row["voice_dont"];
+         }
       }
 
       $query = sprintf("SELECT e.example_phrase AS example_phrase
-                        FROM %s p,
-                             %s e
-                        WHERE p.user_id = ?
-                        AND   p.id      = e.profile_id", CONFIG_PROFILE_TABLE, CONFIG_EXAMPLE_PHRASES);
-      $res = query($query, "s", $userid);
+                        FROM %s e
+                        WHERE e.profile_id = %d", CONFIG_EXAMPLE_PHRASES, $profileId);
+      $res                              = query($query);
       $result["user"]["example_phrase"] = array();
-      foreach($res as $row) {
-         $result["users"]["example_phrase"][] = $row["example_phrase"];
+      if (getAffectedRows() > 0) {
+         foreach($res as $row) {
+            $result["user"]["example_phrase"][] = $row["example_phrase"];
+         }
       }
 
-      $query = sprintf("SELECT e.key_message AS key_message
-                        FROM %s p,
-                             %s k
-                        WHERE p.user_id = ?
-                        AND   p.id      = k.profile_id", CONFIG_PROFILE_TABLE, CONFIG_KEY_MESSAGES);
-      $res = query($query, "s", $userid);
+      $query = sprintf("SELECT k.key_message AS key_message
+                        FROM %s k
+                        WHERE k.profile_id = %d", CONFIG_KEY_MESSAGES, $profileId);
+      $res                           = query($query);
       $result["user"]["key_message"] = array();
-      foreach($res as $row) {
-         $result["users"]["key_message"][] = $row["key_message"];
+      if (getAffectedRows() > 0) {
+         foreach($res as $row) {
+            $result["user"]["key_message"][] = $row["key_message"];
+         }
       }
 
       $query = sprintf("SELECT c.content_goal AS content_goal
-                        FROM %s p,
-                             %s c
-                        WHERE p.user_id = ?
-                        AND   p.id      = c.profile_id", CONFIG_PROFILE_TABLE, CONFIG_CONTENT_GOALS);
-      $res = query($query, "s", $userid);
+                        FROM %s c
+                        WHERE c.profile_id = %d", CONFIG_CONTENT_GOALS, $profileId);
+      $res = query($query);
       $result["user"]["content_goal"] = array();
-      foreach($res as $row) {
-         $result["users"]["content_goal"][] = $row["content_goal"];
+      if (getAffectedRows() > 0) {
+         foreach($res as $row) {
+            $result["user"]["content_goal"][] = $row["content_goal"];
+         }
       }
    
       $query = sprintf("SELECT f.phrase AS phrase
-                        FROM %s p,
-                             %s f
-                        WHERE p.user_id = ?
-                        AND   p.id      = f.profile_id", CONFIG_PROFILE_TABLE, CONFIG_SAVED_FAVOURITES);
-      $res = query($query, "s", $userid);
+                        FROM %s f
+                        WHERE f.profile_id = %d", CONFIG_SAVED_FAVOURITES, $profileId);
+      $res = query($query);
       $result["user"]["phrase"] = array();
-      foreach($res as $row) {
-         $result["users"]["phrase"][] = $row["phrase"];
+      if (getAffectedRows() > 0) {
+         foreach($res as $row) {
+            $result["user"]["phrase"][] = $row["phrase"];
+         }
       }
+
    }
 
    $result["result"] = "success";

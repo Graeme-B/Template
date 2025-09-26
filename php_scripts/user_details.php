@@ -42,7 +42,7 @@ if (array_key_exists("userid",$parms) && is_string($parms["userid"]))
          "two_phase"                => $res[0]["two_phase"],
          "last_logged_in"           => $res[0]["last_logged_in"],
          "account_inactive"         => $res[0]["account_inactive"],
-         "password_reset_requested" => $res[0]["password_reset_requested"],
+         "password_reset_requested" => is_null($res[0]["password_reset_requested"]) ? '0' : $res[0]["password_reset_requested"],
          "invalid_login_attempts"   => $res[0]["invalid_login_attempts"],
          "to_be_activated"          => $res[0]["to_be_activated"],
          "email_invalid"            => $res[0]["email_invalid"]

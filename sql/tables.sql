@@ -13,7 +13,7 @@ CREATE TABLE rmi_users (
     password_reset_requested  TIMESTAMP,
     password_reset_uuid       VARCHAR(255),
     invalid_login_attempts    INT UNSIGNED NOT NULL DEFAULT 0,
-    to_be_activated           BOOLEAN,
+    to_be_activated           BOOLEAN      NOT NULL DEFAULT TRUE,
     email_invalid             BOOLEAN      NOT NULL DEFAULT FALSE
 );
 INSERT INTO rmi_users(
@@ -28,8 +28,9 @@ INSERT INTO rmi_users(
     password_reset_uuid,
     to_be_activated
 ) VALUES
-('graeme', 'graeme', 'burton', '01234 567890', 'graeme@moorwen.com','graeme',TRUE,NULL, NULL, NULL),
-('rhianna', 'rhianna', 'clavering', '01234 567890', 'rhianna@moorwen.com','rhianna',TRUE,NULL, NULL, NULL);
+('graeme', 'graeme', 'burton', '01234 567890', 'graeme@moorwen.com', 'graeme', TRUE, NULL, NULL, NULL),
+('rhianna', 'rhianna', 'clavering', '01234 567890', 'rhianna@moorwen.com', 'rhianna', TRUE, NULL, NULL, NULL)
+('fred', 'fred', 'bloggs', '01234 567890', 'fred@bloggs.com', 'fred', FALSE, NULL, NULL, NULL),
 
 
 -- Create platforms table
@@ -76,8 +77,8 @@ saved_favourites	Links to a table of past saved content						Lets user re-use or
 Lists of target audiences?
 */
 
--- Create rmi_profile table
-CREATE TABLE rmi_profile (
+-- Create rmi_profiles table
+CREATE TABLE rmi_profiles (
     id                   INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     userid               INT UNSIGNED NOT NULL,
     business_name        VARCHAR(256),
@@ -93,55 +94,193 @@ CREATE TABLE rmi_brand_tones(
     id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     profile_id INT UNSIGNED NOT NULL,
     brand_tone VARCHAR(256),
-    FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
+    FOREIGN KEY (profile_id) REFERENCES rmi_profiles(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_writing_styles (
     id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     profile_id    INT UNSIGNED,
     writing_style VARCHAR(256),
-    FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
+    FOREIGN KEY (profile_id) REFERENCES rmi_profiles(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_voice_dos (
     id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     profile_id INT UNSIGNED,
     voice_do   VARCHAR(256),
-    FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
+    FOREIGN KEY (profile_id) REFERENCES rmi_profiles(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_voice_donts (
     id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     profile_id INT UNSIGNED,
     voice_dont VARCHAR(256),
-    FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
-);
+    FOREIGN KEY (profile_id) REFERENCES rmi_profiles(id) ON DELETE CASCADE
+);i
 
 CREATE TABLE rmi_example_phrases(
     id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     profile_id     INT UNSIGNED,
     example_phrase VARCHAR(256),
-    FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
+    FOREIGN KEY (profile_id) REFERENCES rmi_profiles(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_key_messages (
     id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     profile_id  INT UNSIGNED,
     key_message VARCHAR(256),
-    FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
+    FOREIGN KEY (profile_id) REFERENCES rmi_profiles(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_content_goals (
     id           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     profile_id   INT UNSIGNED,
     content_goal VARCHAR(256),
-    FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
+    FOREIGN KEY (profile_id) REFERENCES rmi_profiles(id) ON DELETE CASCADE
 );
 
 CREATE TABLE rmi_saved_favourites(
     id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     profile_id INT UNSIGNED,
     phrase     VARCHAR(256),
-    FOREIGN KEY (profile_id) REFERENCES rmi_profile(id) ON DELETE CASCADE
+    FOREIGN KEY (profile_id) REFERENCES rmi_profiles(id) ON DELETE CASCADE
 );
 
+
+INSERT INTO rmi_profiles (
+    userid,
+    business_name,
+    industry,
+    products_or_services,
+    target_audience,
+    reminder_frequency
+)
+SELECT id, 'Bloggs Bananas', 'Greengrocers', 'Bananas', 'Banana buyers', 1
+FROM rmi_users u
+WHERE u.userid = 'fred';
+
+INSERT INTO rmi_brand_tones(
+    profile_id,
+    brand_tone
+)
+SELECT p.id, 'Cheeky'
+FROM rmi_profiles p,
+     rmi_users    u
+WHERE u.userid = 'fred'
+AND   p.userid = u.id;
+
+INSERT INTO rmi_writing_styles (
+    profile_id,
+    writing_style
+)
+SELECT p.id, 'Story-led'
+FROM rmi_profiles p,
+     rmi_users    u
+WHERE u.userid = 'fred'
+AND   p.userid = u.id;
+
+INSERT INTO rmi_voice_dos (
+    profile_id,
+    voice_do
+)
+SELECT p.id, 'Humour'
+FROM rmi_profiles p,
+     rmi_users    u
+WHERE u.userid = 'fred'
+AND   p.userid = u.id;
+
+INSERT INTO rmi_voice_donts (
+    profile_id,
+    voice_dont
+)
+SELECT p.id, 'Sounding salesy'
+FROM rmi_profiles p,
+     rmi_users    u
+WHERE u.userid = 'fred'
+AND   p.userid = u.id;
+
+-- CREATE TABLE rmi_example_phrases(
+--     id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+--     profile_id     INT UNSIGNED,
+--     example_phrase VARCHAR(256),
+--     FOREIGN KEY (profile_id) REFERENCES rmi_profiles(id) ON DELETE CASCADE
+-- );
+
+INSERT INTO rmi_key_messages (
+    profile_id,
+    key_message
+)
+SELECT p.id, 'Home grown'
+FROM rmi_profiles p,
+     rmi_users    u
+WHERE u.userid = 'fred'
+AND   p.userid = u.id;
+
+INSERT INTO rmi_content_goals (
+    profile_id,
+    content_goal
+)
+SELECT p.id, 'Drive sales'
+FROM rmi_profiles p,
+     rmi_users    u
+WHERE u.userid = 'fred'
+AND   p.userid = u.id;
+
+-- CREATE TABLE rmi_saved_favourites(
+--     id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+--     profile_id INT UNSIGNED,
+--     phrase     VARCHAR(256),
+--     FOREIGN KEY (profile_id) REFERENCES rmi_profiles(id) ON DELETE CASCADE
+-- );
+
+
+-- Delete tables
+DELETE FROM rmi_brand_tones;
+DROP TABLE rmi_brand_tones;
+
+DELETE FROM rmi_writing_styles;
+DROP TABLE rmi_writing_styles;
+
+DELETE FROM rmi_voice_dos;
+DROP TABLE rmi_voice_dos;
+
+DELETE FROM rmi_voice_donts;
+DROP TABLE rmi_voice_donts;
+
+DELETE FROM rmi_example_phrases;
+DROP TABLE rmi_example_phrases;
+
+DELETE FROM rmi_key_messages;
+DROP TABLE rmi_key_messages;
+
+DELETE FROM rmi_content_goals;
+DROP TABLE rmi_content_goals;
+
+DELETE FROM rmi_saved_favourites;
+DROP TABLE rmi_saved_favourites;
+
+DELETE FROM rmi_profiles;
+DROP TABLE rmi_profiles;
+
+DELETE FROM rmi_reminder_frequencies;
+DROP TABLE rmi_reminder_frequencies
+
+DELETE FROM rmi_platforms;
+DROP TABLE rmi_platforms;
+
+DELETE FROM rmi_users;
+DROP TABLE rmi_users;
+
+
+
+SELECT p.business_name        AS business_name,
+       p.industry             AS industry,
+       p.products_or_services AS products_or_services,
+       p.target_audience      AS target_audience,
+       r.frequency            AS frequency
+FROM rmi_users u,
+     rmi_profiles p,
+     rmi_reminder_frequencies r       
+WHERE u.userid = 'fred'
+AND   u.id = p.userid
+AND   p.reminder_frequency = r.id
