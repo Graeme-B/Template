@@ -1,6 +1,6 @@
 import React, { useState, useEffect, navigation } from 'react';
 import { Link } from "react-router-dom"
-import { Box, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material'
+import { TextField, FormGroup, Box, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material'
 import $ from 'jquery';
 import { format } from 'util';
 import packageInfo from '../../package.json';
@@ -8,38 +8,22 @@ import * as Constants from '../Constants';
 import { useAuthContext } from '../AuthContext'
 
 export default function UserConfig (props) {
-  const [country, setCountry]             = useState("");
-  const [year, setYear]                   = useState("");
-  const [course, setCourse]               = useState("");
-  const [clazz, setClazz]                 = useState("");
-  const [tableContent, setTableContent]   = useState([]);
-  const [countries, setCountries]         = useState([]);
-  const [years, setYears]                 = useState([]);
-  const [courses, setCourses]             = useState([]);
-  const [classes, setClasses]             = useState([]);
-  const [walkList, setWalkList]           = useState([]);
-  const [confirmIsOpen, setConfirmIsOpen] = useState(false);
-  const [deletionId, setDeletionId]       = useState(0);
-  const [rowsPerPage, setRowsPerPage]     = useState(25);
-  const [currentRow, setCurrentRow]       = useState(0);
-  const [numRows, setNumRows]             = useState(0);
-  const [nextEnabled, setNextEnabled]     = useState(false);
-  const [prevEnabled, setPrevEnabled]     = useState(false);
-  const [pageNo, setPageNo]               = useState(1);
-  const [inputPageNo, setInputPageNo]     = useState(1);
-  const [numPages, setNumPages]           = useState(1);
-   const {authenticated, setAuthenticated,
-          name, setName,
-          email, setEmail,
-          userid, setUserid}              = useAuthContext();
-  var tableContentFunction;
-  var tableHeaderFunction;
-  var walkId;
+  const {authenticated, setAuthenticated,
+         name, setName,
+         email, setEmail,
+         userid, setUserid}                         = useAuthContext();
+  const [businessName, setBusinessName]             = useState("");
+  const [industry, setIndustry]                     = useState("");
+  const [productsOrServices, setProductsOrServices] = useState("");
+  const [targetAudience, setTargetAudience]         = useState("");
+  const [frequency, setFrequency]                   = useState("");
+  const [brandTone, setBrandTone]                   = useState("");
+  const [keyMessage, setKeyMessage]                 = useState("");
 
-  const hideHeader   = () => { var elem = document.getElementById("header"); elem.style.display = 'none'; }
-  const hideFooter   = () => { var elem = document.getElementById("footer"); elem.style.display = 'none'; }
-  const closeConfirm = () => setConfirmIsOpen(false)
-  const openConfirm  = (walkId) => { setDeletionId(walkId); setConfirmIsOpen(true); }
+//   const hideHeader   = () => { var elem = document.getElementById("header"); elem.style.display = 'none'; }
+//   const hideFooter   = () => { var elem = document.getElementById("footer"); elem.style.display = 'none'; }
+//   const closeConfirm = () => setConfirmIsOpen(false)
+//   const openConfirm  = (walkId) => { setDeletionId(walkId); setConfirmIsOpen(true); }
 
   useEffect(() => {
     fetchData();
@@ -52,23 +36,109 @@ export default function UserConfig (props) {
       xhrFields: { withCredentials: true, credentials: 'include' },
       success(json, textStatus, request) {
         if (json["result"] === "success") {
-          let y = [];
-//           json["users"].forEach((item) => {
-//             y.push({
-//               "key": Math.floor(Math.random() * 999999),
-//               "userid": item.userid,
-//               "admin_user": item.admin_user,
-//               "invalid_login_attempts": item.invalid_login_attempts,
-//               "email": item.email,
-//               "to_be_activated": item.to_be_activated,
-//               "email_invalid": item.email_invalids
-//             });
+          let userConfig = [];
+//           userConfig["businessName"]       = json["user"]["business_name"];
+//           userConfig["industry"]           = json["user"]["industry"];
+//           userConfig["productsOrServices"] = json["user"]["products_or_services"];
+//           userConfig["targetAudience"]     = json["user"]["target_audience"];
+//           userConfig["frequency"]          = json["user"]["frequency"];
+          setBusinessName(json["user"]["business_name"]);
+          setIndustry(json["user"]["industry"]);
+          setProductsOrServices(json["user"]["products_or_services"]);
+          setTargetAudience(json["user"]["target_audience"]);
+          setFrequency(json["user"]["frequency"]);
+          let bt = "";
+          for (var i = 0; i < json["user"]["brand_tone"].length; i++) {
+              if (i > 0) bt = bt + "\n";
+              bt = bt + json["user"]["brand_tone"][i];
+          }
+          setBrandTone(bt);
+
+//           userConfig["brandTone"] = [];
+//           json["user"]["brand_tone"].forEach((item) => {
+//               userConfig["brandTone"].push(item);
 //           });
-//           setTableContent(y);
+//           userConfig["writingStyle"] = [];
+//           json["user"]["writing_style"].forEach((item) => {
+//               userConfig["writingStyle"].push(item);
+//           });
+//           userConfig["voiceDo"] = [];
+//           json["user"]["voice_do"].forEach((item) => {
+//               userConfig["voiceDo"].push(item);
+//           });
+//           userConfig["voiceDont"] = [];
+//           json["user"]["voice_dont"].forEach((item) => {
+//               userConfig["voiceDont"].push(item);
+//           });
+//           userConfig["examplePhrase"] = [];
+//           json["user"]["example_phrase"].forEach((item) => {
+//               userConfig["examplePhrase"].push(item);
+//           });
+//           userConfig["keyMessage"] = [];
+//           json["user"]["key_message"].forEach((item) => {
+//               userConfig["keyMessage"].push(item);
+//           });
+          let km = "";
+          for (var i = 0; i < json["user"]["key_message"].length; i++) {
+              if (i > 0) km = km + "\n";
+              km = km + json["user"]["key_message"][i];
+          }
+          setKeyMessage(km);
+
+//           userConfig["contentGoal"] = [];
+//           json["user"]["content_goal"].forEach((item) => {
+//               userConfig["contentGoal"].push(item);
+//           });
+//           userConfig["phrase"] = [];
+//           json["user"]["phrase"].forEach((item) => {
+//               userConfig["phrase"].push(item);
+//           });
+//           setUserConfig(userConfig);
         }
       }
     });
   }
+
+  const handleBusinessNameChange = event => {
+//     userConfig["businessName"] = event.target.value;
+//     setUserConfig(userConfig);
+    setBusinessName(event.target.value);
+  };
+  const handleIndustryChange = event => {
+//     userConfig["industry"] = event.target.value;
+//     setUserConfig(userConfig);
+    setIndustry(event.target.value);
+  };
+  const handleProductsOrServicesChange = event => {
+//     userConfig["productsOrServices"] = event.target.value;
+//     setUserConfig(userConfig);
+    setProductsOrServices(event.target.value);
+  };
+  const handleTargetAudienceChange = event => {
+//     userConfig["targetAudience"] = event.target.value;
+//     setUserConfig(userConfig);
+    setTargetAudience(event.target.value);
+  };
+  const handleFrequencyChange = event => {
+//     userConfig["frequency"] = event.target.value;
+//     setUserConfig(userConfig);
+//
+//     setUserConfig(prev => ({
+//           ...prev,
+//           frequency: event.target.value
+//         }));
+   setFrequency(event.target.value);
+  };
+  const handleBrandToneChange = event => {
+    setBrandTone(event.target.value);
+  };
+  const handleKeyMessageChange = event => {
+    setKeyMessage(event.target.value);
+  };
+
+
+
+
 
   {/*
   const contentStyle = {
@@ -154,57 +224,86 @@ export default function UserConfig (props) {
     padding: "10px 10px 10px 10px",
   }
 
-//   const fetchData = (actionAndParameters) => {
-//     $.ajax({
-//       type: "GET",
-//       url: packageInfo.actionsUrl + actionAndParameters,
-//       xhrFields: { withCredentials: true, credentials: 'include' },
-//       success(json) {
-//         if (json["result"] === "success") {
-//           if (authenticated === Constants.USER_TYPE_ORDINARY || authenticated === Constants.USER_TYPE_UNAUTHENTICATED || props.action === Constants.ACTION_APPROVED) {
-//             const startRow = parseInt(json["start_row"]);
-//             const rowCount = parseInt(json["num_rows"]);
-//             setChoices(json["courses"], setCourses, setCourse);
-//             setChoices(json["years"], setYears, setYear);
-//             setChoices(json["countries"], setCountries, setCountry);
-//             setChoices(json["classes"], setClasses, setClazz);
-//             setCountry(json["country"]);
-//             setYear(json["year"]);
-//             setCourse(json["course"]);
-//             setClazz(json["class"]);
-//             setCurrentRow(startRow);
-//             setNumRows(rowCount);
-//             if (startRow <= 0) {
-//               setPrevEnabled(false);
-//             } else {
-//               setPrevEnabled(true);
-//             }
-//             if (startRow + rowsPerPage > rowCount) {
-//               setNextEnabled(false);
-//             } else {
-//               setNextEnabled(true);
-//             }
-//             setPageNo(Math.floor(startRow/rowsPerPage) + 1);
-//             setInputPageNo(Math.floor(startRow/rowsPerPage) + 1);
-//             setNumPages(Math.floor((rowCount - 1)/rowsPerPage) + 1);
-//           }
-//           setWalkList(json["walks"]);
-//           setWalks(json["walks"], "All", "All", "All", "All" );
-//         } else {
-//           alert("Unable to retrieve walk list");
-//         }
-//       }
-//     });
-//   };
-
   return (
     <div>
-      <div d="wrapper" style={wrapperStyle}>
+      <div id="wrapper" style={wrapperStyle}>
         <div id="header" style={headerStyle}>
         </div>
 
         <div id="content" style={contentStyle}>
                 Hello, world from the config page of user {userid}!
+          <FormGroup>
+          <TextField
+           autoFocus
+           margin="dense"
+           id="businessName"
+           label="Business name"
+           type="text"
+           fullWidth
+           variant="outlined"
+           value={businessName}
+           onChange={handleBusinessNameChange}
+           inputProps={{maxLength: Constants.BUSINESS_NAME_LEN}}
+          />
+          <TextField
+           margin="dense"
+           id="industry"
+           label="Industry"
+           type="text"
+           fullWidth
+           variant="outlined"
+           value={industry}
+           onChange={handleIndustryChange}
+           inputProps={{maxLength: Constants.INDUSTRY_LEN}}
+          />
+          <TextField
+           margin="dense"
+           id="productsOrServices"
+           label="Products or Services"
+           type="text"
+           fullWidth
+           variant="outlined"
+           value={productsOrServices}
+           onChange={handleProductsOrServicesChange}
+           inputProps={{maxLength: Constants.PRODUCTS_OR_SERVICES_LEN}}
+          />
+          <TextField
+           margin="dense"
+           id="targetAudience"
+           label="Target Audience"
+           type="text"
+           fullWidth
+           variant="outlined"
+           value={targetAudience}
+           onChange={handleTargetAudienceChange}
+           inputProps={{maxLength: Constants.TARGET_AUDIENCE_LEN}}
+          />
+          <TextField
+           margin="dense"
+           id="frequency"
+           label="Frequency"
+           type="text"
+           fullWidth
+           variant="outlined"
+           value={frequency}
+           onChange={handleFrequencyChange}
+           inputProps={{maxLength: Constants.FREQUENCY_LEN}}
+          />
+          <textarea
+            value={brandTone}
+            onChange={handleBrandToneChange}
+            placeholder="Brand tones"
+            rows={5}
+            cols={40}
+          />
+          <textarea
+            value={keyMessage}
+            onChange={handleKeyMessageChange}
+            placeholder="Key messages"
+            rows={5}
+            cols={40}
+          />
+          </FormGroup>
         </div>
 
         <div id="footer" style={footerStyle}>

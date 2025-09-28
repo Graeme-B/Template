@@ -1,6 +1,5 @@
-import React, { useState, useEffect, navigation } from 'react';
-import { Link, useNavigate } from "react-router-dom"
-import { Box, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material'
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom"
 import $ from 'jquery';
 import { format } from 'util';
 import packageInfo from '../../package.json';
@@ -9,34 +8,17 @@ import ConfirmDialog from './ConfirmDialog.jsx';
 import { useAuthContext } from '../AuthContext'
 
 export default function AdminHome (props) {
-  const [country, setCountry]             = useState("");
-  const [year, setYear]                   = useState("");
-  const [course, setCourse]               = useState("");
-  const [clazz, setClazz]                 = useState("");
   const [tableContent, setTableContent]   = useState([]);
-  const [countries, setCountries]         = useState([]);
-  const [years, setYears]                 = useState([]);
-  const [courses, setCourses]             = useState([]);
-  const [classes, setClasses]             = useState([]);
-  const [walkList, setWalkList]           = useState([]);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
   const [deletionId, setDeletionId]       = useState(0);
-  const [rowsPerPage, setRowsPerPage]     = useState(25);
-  const [currentRow, setCurrentRow]       = useState(0);
-  const [numRows, setNumRows]             = useState(0);
-  const [nextEnabled, setNextEnabled]     = useState(false);
-  const [prevEnabled, setPrevEnabled]     = useState(false);
-  const [pageNo, setPageNo]               = useState(1);
-  const [inputPageNo, setInputPageNo]     = useState(1);
-  const [numPages, setNumPages]           = useState(1);
   const {authenticated, setAuthenticated,
          name, setName,
          email, setEmail,
          userid, setUserid}               = useAuthContext();
 
   const navigate     = useNavigate();
-  const hideHeader   = () => { var elem = document.getElementById("header"); elem.style.display = 'none'; }
-  const hideFooter   = () => { var elem = document.getElementById("footer"); elem.style.display = 'none'; }
+//   const hideHeader   = () => { var elem = document.getElementById("header"); elem.style.display = 'none'; }
+//   const hideFooter   = () => { var elem = document.getElementById("footer"); elem.style.display = 'none'; }
   const closeConfirm = () => setConfirmIsOpen(false);
   const openConfirm  = (userId) => { setDeletionId(userId); setConfirmIsOpen(true); }
   const goToPage     = (page) => navigate(page);
