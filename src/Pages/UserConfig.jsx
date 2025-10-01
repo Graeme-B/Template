@@ -1,6 +1,6 @@
 import React, { useState, useEffect, navigation } from 'react';
 import { Link } from "react-router-dom"
-import { TextField, FormGroup, Box, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material'
+import { TextField, FormGroup, Box, FormControl, InputLabel, Select, MenuItem, Grid, Button } from '@mui/material'
 import $ from 'jquery';
 import { format } from 'util';
 import packageInfo from '../../package.json';
@@ -18,7 +18,13 @@ export default function UserConfig (props) {
   const [targetAudience, setTargetAudience]         = useState("");
   const [frequency, setFrequency]                   = useState("");
   const [brandTone, setBrandTone]                   = useState("");
+  const [writingStyle, setWritingStyle]             = useState("");
+  const [voiceDo, setVoiceDo]                       = useState("");
+  const [voiceDont, setVoiceDont]                   = useState("");
+  const [examplePhrase, setExamplePhrase]           = useState("");
   const [keyMessage, setKeyMessage]                 = useState("");
+  const [contentGoal, setContentGoal]               = useState("");
+  const [phrase, setPhrase]                         = useState("");
 
 //   const hideHeader   = () => { var elem = document.getElementById("header"); elem.style.display = 'none'; }
 //   const hideFooter   = () => { var elem = document.getElementById("footer"); elem.style.display = 'none'; }
@@ -29,6 +35,17 @@ export default function UserConfig (props) {
     fetchData();
   }, []);
 
+  function getArray(json, element) {
+    let retval = "";
+    if (typeof json[element] !== "undefined") {
+      for (var i = 0; i < json[element].length; i++) {
+        if (i > 0) retval = retval + "\n";
+        retval = retval + json[element][i];
+      }
+    }
+    return retval;
+  }
+
   function fetchData() {
     $.ajax({
       type: "GET",
@@ -37,103 +54,63 @@ export default function UserConfig (props) {
       success(json, textStatus, request) {
         if (json["result"] === "success") {
           let userConfig = [];
-//           userConfig["businessName"]       = json["user"]["business_name"];
-//           userConfig["industry"]           = json["user"]["industry"];
-//           userConfig["productsOrServices"] = json["user"]["products_or_services"];
-//           userConfig["targetAudience"]     = json["user"]["target_audience"];
-//           userConfig["frequency"]          = json["user"]["frequency"];
           setBusinessName(json["user"]["business_name"]);
           setIndustry(json["user"]["industry"]);
           setProductsOrServices(json["user"]["products_or_services"]);
           setTargetAudience(json["user"]["target_audience"]);
           setFrequency(json["user"]["frequency"]);
-          let bt = "";
-          for (var i = 0; i < json["user"]["brand_tone"].length; i++) {
-              if (i > 0) bt = bt + "\n";
-              bt = bt + json["user"]["brand_tone"][i];
-          }
-          setBrandTone(bt);
+          setBrandTone(getArray(json["user"], "brand_tone"));
+          setWritingStyle(getArray(json["user"], "writing_style"));
+          setVoiceDo(getArray(json["user"], "voice_do"));
+          setVoiceDont(getArray(json["user"], "voice_dont"));
+          setExamplePhrase(getArray(json["user"], "phrase"));
+          setKeyMessage(getArray(json["user"], "key_message"));
+          setContentGoal(getArray(json["user"], "content_goal"));
+          setPhrase(getArray(json["user"], "phrase"));
 
-//           userConfig["brandTone"] = [];
-//           json["user"]["brand_tone"].forEach((item) => {
-//               userConfig["brandTone"].push(item);
-//           });
-//           userConfig["writingStyle"] = [];
-//           json["user"]["writing_style"].forEach((item) => {
-//               userConfig["writingStyle"].push(item);
-//           });
-//           userConfig["voiceDo"] = [];
-//           json["user"]["voice_do"].forEach((item) => {
-//               userConfig["voiceDo"].push(item);
-//           });
-//           userConfig["voiceDont"] = [];
-//           json["user"]["voice_dont"].forEach((item) => {
-//               userConfig["voiceDont"].push(item);
-//           });
-//           userConfig["examplePhrase"] = [];
-//           json["user"]["example_phrase"].forEach((item) => {
-//               userConfig["examplePhrase"].push(item);
-//           });
-//           userConfig["keyMessage"] = [];
-//           json["user"]["key_message"].forEach((item) => {
-//               userConfig["keyMessage"].push(item);
-//           });
-          let km = "";
-          for (var i = 0; i < json["user"]["key_message"].length; i++) {
-              if (i > 0) km = km + "\n";
-              km = km + json["user"]["key_message"][i];
-          }
-          setKeyMessage(km);
-
-//           userConfig["contentGoal"] = [];
-//           json["user"]["content_goal"].forEach((item) => {
-//               userConfig["contentGoal"].push(item);
-//           });
-//           userConfig["phrase"] = [];
-//           json["user"]["phrase"].forEach((item) => {
-//               userConfig["phrase"].push(item);
-//           });
-//           setUserConfig(userConfig);
         }
       }
     });
   }
 
   const handleBusinessNameChange = event => {
-//     userConfig["businessName"] = event.target.value;
-//     setUserConfig(userConfig);
     setBusinessName(event.target.value);
   };
   const handleIndustryChange = event => {
-//     userConfig["industry"] = event.target.value;
-//     setUserConfig(userConfig);
     setIndustry(event.target.value);
   };
   const handleProductsOrServicesChange = event => {
-//     userConfig["productsOrServices"] = event.target.value;
-//     setUserConfig(userConfig);
     setProductsOrServices(event.target.value);
   };
   const handleTargetAudienceChange = event => {
-//     userConfig["targetAudience"] = event.target.value;
-//     setUserConfig(userConfig);
     setTargetAudience(event.target.value);
   };
   const handleFrequencyChange = event => {
-//     userConfig["frequency"] = event.target.value;
-//     setUserConfig(userConfig);
-//
-//     setUserConfig(prev => ({
-//           ...prev,
-//           frequency: event.target.value
-//         }));
-   setFrequency(event.target.value);
+    setFrequency(event.target.value);
   };
   const handleBrandToneChange = event => {
     setBrandTone(event.target.value);
   };
   const handleKeyMessageChange = event => {
     setKeyMessage(event.target.value);
+  };
+  const handleWritingStyleChange = event => {
+    setWritingStyle(event.target.value);
+  }
+  const handleVoiceDoChange = event => {
+    setVoiceDo(event.target.value);
+  }
+  const handleVoiceDontChange = event => {
+    setVoiceDont(event.target.value);
+  }
+  const handleExamplePhraseChange = event => {
+    setExamplePhrase(event.target.value);
+  }
+  const handleContentGoalChange = event => {
+    setContentGoal(event.target.value);
+  };
+  const handlePhraseChange = event => {
+    setPhrase(event.target.value);
   };
 
 
@@ -231,7 +208,6 @@ export default function UserConfig (props) {
         </div>
 
         <div id="content" style={contentStyle}>
-                Hello, world from the config page of user {userid}!
           <FormGroup>
           <TextField
            autoFocus
@@ -281,7 +257,7 @@ export default function UserConfig (props) {
           <TextField
            margin="dense"
            id="frequency"
-           label="Frequency"
+           label="Reminder Frequency"
            type="text"
            fullWidth
            variant="outlined"
@@ -289,20 +265,112 @@ export default function UserConfig (props) {
            onChange={handleFrequencyChange}
            inputProps={{maxLength: Constants.FREQUENCY_LEN}}
           />
+          <label htmlFor="brandToneId">
+          Brand tones
+          </label>
           <textarea
+            id="brandToneId"
             value={brandTone}
             onChange={handleBrandToneChange}
-            placeholder="Brand tones"
+            placeholder="Add brand tones"
             rows={5}
             cols={40}
           />
+          <label htmlFor="writingStyleId">
+          Writing Styles
+          </label>
           <textarea
+            id="writingStyleId"
+            value={writingStyle}
+            onChange={handleWritingStyleChange}
+            placeholder="Add writing styles"
+            rows={5}
+            cols={40}
+          />
+          <label htmlFor="voiceDosId">
+          Voice Dos
+          </label>
+          <textarea
+            id="voiceDosId"
+            value={voiceDo}
+            onChange={handleVoiceDoChange}
+            placeholder="Add voice dos"
+            rows={5}
+            cols={40}
+          />
+          <label htmlFor="voiceDontsId">
+          Voice Donts
+          </label>
+          <textarea
+            id="voiceDontsId"
+            value={voiceDont}
+            onChange={handleVoiceDontChange}
+            placeholder="Add voice donts"
+            rows={5}
+            cols={40}
+          />
+          <label htmlFor="examplePhraseId">
+          Example phrases
+          </label>
+          <textarea
+            id="examplePhraseId"
+            value={examplePhrase}
+            onChange={handleExamplePhraseChange}
+            placeholder="Add example phrases"
+            rows={5}
+            cols={40}
+          />
+          <label htmlFor="keyMessageId">
+          Key messages
+          </label>
+          <textarea
+            id="keyMessageId"
             value={keyMessage}
             onChange={handleKeyMessageChange}
-            placeholder="Key messages"
+            placeholder="Add key messages"
             rows={5}
             cols={40}
           />
+          <label htmlFor="contentGoalId">
+          Content goals
+          </label>
+          <textarea
+            id="contentGoalId"
+            value={contentGoal}
+            onChange={handleContentGoalChange}
+            placeholder="Add content goals"
+            rows={5}
+            cols={40}
+          />
+          <label htmlFor="savedPhraseId">
+          Saved phrases
+          </label>
+          <textarea
+            id="savedPhraseId"
+            value={phrase}
+            onChange={handlePhraseChange}
+            placeholder="Add saved phrases"
+            rows={5}
+            cols={40}
+          />
+          <br/>
+          <Box>
+            <Button variant="contained"
+                    onClick={() => {
+                      alert('Save');
+                    }}
+            >
+            Save
+            </Button>
+            &nbsp;
+            <Button variant="contained"
+                    onClick={() => {
+                      alert('Cancel');
+                    }}
+            >
+           Cancel
+           </Button>
+         </Box>
           </FormGroup>
         </div>
 
