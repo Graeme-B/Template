@@ -1,6 +1,6 @@
 import React, { useState, useEffect, navigation } from 'react';
 import { Link } from "react-router-dom"
-import { Box, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material'
+import { TextField, FormGroup, Box, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material'
 import { useAuthContext } from '../AuthContext'
 import $ from 'jquery';
 import { format } from 'util';
@@ -8,38 +8,15 @@ import packageInfo from '../../package.json';
 import * as Constants from '../Constants';
 
 export default function UserHome (props) {
-  const [country, setCountry]             = useState("");
-  const [year, setYear]                   = useState("");
-  const [course, setCourse]               = useState("");
-  const [clazz, setClazz]                 = useState("");
-  const [tableContent, setTableContent]   = useState([]);
-  const [countries, setCountries]         = useState([]);
-  const [years, setYears]                 = useState([]);
-  const [courses, setCourses]             = useState([]);
-  const [classes, setClasses]             = useState([]);
-  const [walkList, setWalkList]           = useState([]);
-  const [confirmIsOpen, setConfirmIsOpen] = useState(false);
-  const [deletionId, setDeletionId]       = useState(0);
-  const [rowsPerPage, setRowsPerPage]     = useState(25);
-  const [currentRow, setCurrentRow]       = useState(0);
-  const [numRows, setNumRows]             = useState(0);
-  const [nextEnabled, setNextEnabled]     = useState(false);
-  const [prevEnabled, setPrevEnabled]     = useState(false);
-  const [pageNo, setPageNo]               = useState(1);
-  const [inputPageNo, setInputPageNo]     = useState(1);
-  const [numPages, setNumPages]           = useState(1);
   const {authenticated, setAuthenticated,
          name, setName,
          email, setEmail,
          userid, setUserid}               = useAuthContext();
-  var tableContentFunction;
-  var tableHeaderFunction;
-  var walkId;
+  const [userConfig,setUserConfig]        = useState([]);
+  const [content,setContent]              = useState("");
 
   const hideHeader   = () => { var elem = document.getElementById("header"); elem.style.display = 'none'; }
   const hideFooter   = () => { var elem = document.getElementById("footer"); elem.style.display = 'none'; }
-  const closeConfirm = () => setConfirmIsOpen(false)
-  const openConfirm  = (walkId) => { setDeletionId(walkId); setConfirmIsOpen(true); }
 
   {/*
   const contentStyle = {
@@ -125,48 +102,98 @@ export default function UserHome (props) {
     padding: "10px 10px 10px 10px",
   }
 
-//   const fetchData = (actionAndParameters) => {
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function getArray(json, element) {
+    let retval = "";
+    if (typeof json[element] !== "undefined") {
+      for (var i = 0; i < json[element].length; i++) {
+        if (i > 0) retval = retval + "\n";
+        retval = retval + json[element][i];
+      }
+    }
+    return retval;
+  }
+
+  function fetchData() {
+    $.ajax({
+      type: "GET",
+      url: packageInfo.actionsUrl + format(Constants.OPERATION_USER_CONFIG,encodeURIComponent(userid.trim())),
+      xhrFields: { withCredentials: true, credentials: 'include' },
+      success(json, textStatus, request) {
+        if (json["result"] === "success") {
+          let userConfig = [];
+          userConfig["businessName"] = json["user"]["business_name"];
+          userConfig["industry"] = json["user"]["industry"];
+          userConfig["productsOrServices"] = json["user"]["products_or_services"];
+          userConfig["targetAudience"] = json["user"]["target_audience"];
+          userConfig["frequency"] = json["user"]["frequency"];
+          userConfig["brandTone"] = getArray(json["user"], "brand_tone");
+          userConfig["writingStyle"] = getArray(json["user"], "writing_style");
+          userConfig["voiceDo"] = getArray(json["user"], "voice_do");
+          userConfig["voiceDont"] = getArray(json["user"], "voice_dont");
+          userConfig["examplePhrase"] = getArray(json["user"], "phrase");
+          userConfig["keyMessage"] = getArray(json["user"], "key_message");
+          userConfig["contentGoal"] = getArray(json["user"], "content_goal");
+          userConfig["phrase"] = getArray(json["user"], "phrase");
+
+        }
+      }
+    });
+  }
+
+//   const getPhrases = () => {
 //     $.ajax({
-//       type: "GET",
-//       url: packageInfo.actionsUrl + actionAndParameters,
-//       xhrFields: { withCredentials: true, credentials: 'include' },
-//       success(json) {
-//         if (json["result"] === "success") {
-//           if (authenticated === Constants.USER_TYPE_ORDINARY || authenticated === Constants.USER_TYPE_UNAUTHENTICATED || props.action === Constants.ACTION_APPROVED) {
-//             const startRow = parseInt(json["start_row"]);
-//             const rowCount = parseInt(json["num_rows"]);
-//             setChoices(json["courses"], setCourses, setCourse);
-//             setChoices(json["years"], setYears, setYear);
-//             setChoices(json["countries"], setCountries, setCountry);
-//             setChoices(json["classes"], setClasses, setClazz);
-//             setCountry(json["country"]);
-//             setYear(json["year"]);
-//             setCourse(json["course"]);
-//             setClazz(json["class"]);
-//             setCurrentRow(startRow);
-//             setNumRows(rowCount);
-//             if (startRow <= 0) {
-//               setPrevEnabled(false);
-//             } else {
-//               setPrevEnabled(true);
-//             }
-//             if (startRow + rowsPerPage > rowCount) {
-//               setNextEnabled(false);
-//             } else {
-//               setNextEnabled(true);
-//             }
-//             setPageNo(Math.floor(startRow/rowsPerPage) + 1);
-//             setInputPageNo(Math.floor(startRow/rowsPerPage) + 1);
-//             setNumPages(Math.floor((rowCount - 1)/rowsPerPage) + 1);
-//           }
-//           setWalkList(json["walks"]);
-//           setWalks(json["walks"], "All", "All", "All", "All" );
-//         } else {
-//           alert("Unable to retrieve walk list");
-//         }
-//       }
-//     });
-//   };
+//       type: "POST",
+//       url: packageInfo.aiUrl,
+
+
+// $business_name = "acme inc";
+// $industry = "Cookies";
+// $tone = "friendly, cozy, playful, a little cheeky";
+// $audience = "young moms, college students, locals";
+// $products_or_services = "flour, water, chocolate";
+// $posting_goals = "grow following";
+// $content_preferences = "no hard sales";
+// $location = "Worthing, West Sussex";
+
+// voice_examples: actual captions or phrases from the client
+// do_not_do: brand-specific no-gos (e.g., “never sound corporate”)
+// common_emojis: e.g. 🧁✨💖
+// products_or_services: list of offerings
+// content_preferences: (e.g. “no hard sales, prefers story-based posts”)
+// posting_goals: grow following, drive in-store visits, highlight new items
+// location: (used for local content & events)
+// image_style: optional — what their content looks like visually
+
+
+// $system_content = sprintf("You are a social media assistant for a small business. ".
+//                           "This business is called %s. ".
+//                           "Tone: %s ".
+//                           "Audience: %s ".
+// //                          "Avoid: [do_not_do]
+// //                          "Use phrases like: [voice_examples]
+// //                          "Emojis: [common_emojis]
+//                           "Content preferences: %s",
+//                           $business_name, $tone, $audience, $content_preferences);
+
+
+// $data = '{
+//     "model": "gpt-4o-mini",
+//     "store": true,
+//     "messages": [
+//         {"role": "system", "content": "'.$system_content.'"},
+//         {"role": "user", "content": "'.$input.'. Please write three one line sales pitches."}
+//     ]
+//   }';
+//
+// $ch = curl_init("https://api.openai.com/v1/chat/completions");
+
+  const handleContentChange = event => {
+    setContent(event.target.value);
+  };
 
   return (
     <div>
@@ -175,7 +202,27 @@ export default function UserHome (props) {
         </div>
 
         <div id="content" style={contentStyle}>
-                Hello, world from the user home page!
+          <FormGroup>
+          <label htmlFor="contentId">
+          Enter your content
+          </label>
+          <textarea
+            id="contentId"
+            value={content}
+            onChange={handleContentChange}
+            placeholder="Add content"
+            rows={5}
+            cols={40}
+          />
+          <Box sx={{ width: 'fit-content', mt: 2 }}>
+            <Button
+              variant="contained"
+              onClick={() => alert('Save')}
+            >
+              Generate phrases
+            </Button>
+          </Box>
+          </FormGroup>
         </div>
 
         <div id="footer" style={footerStyle}>

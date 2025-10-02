@@ -363,7 +363,7 @@ export default function UserConfig (props) {
             Save
             </Button>
             &nbsp;
-            <Button variant="contained"
+            <Button
                     onClick={() => {
                       alert('Cancel');
                     }}

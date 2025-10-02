@@ -2,6 +2,7 @@
   "name": "react-website",
   "homepage": "/rhianna",
   "actionsUrl": "http://localhost/rhianna/actions.php",
+  "aiUrl": "https://api.openai.com/v1/chat/completions",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
